@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Prediction System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Crop Prediction System</h1>
+            <p>Enter soil and environmental conditions to get crop recommendations</p>
+        </header>
+
+        <main>
+            <div class="input-section">
+                <h2>Soil Parameters</h2>
+                <form id="cropForm">
+                    <div class="form-group">
+                        <label for="N">Nitrogen (N) - kg/ha</label>
+                        <input type="number" id="N" name="N" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="P">Phosphorus (P) - kg/ha</label>
+                        <input type="number" id="P" name="P" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="K">Potassium (K) - kg/ha</label>
+                        <input type="number" id="K" name="K" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="temperature">Temperature (°C)</label>
+                        <input type="number" id="temperature" name="temperature" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="humidity">Humidity (%)</label>
+                        <input type="number" id="humidity" name="humidity" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ph">pH (1-14)</label>
+                        <input type="number" id="ph" name="ph" min="1" max="14" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="rainfall">Rainfall (mm)</label>
+                        <input type="number" id="rainfall" name="rainfall" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cropName">Specific Crop (Optional)</label>
+                        <input type="text" id="cropName" name="cropName" placeholder="Enter crop name in English or Hindi">
+                    </div>
+                    <div class="button-group">
+                        <button type="button" id="recommendBtn">Get Recommendation</button>
+                        <button type="button" id="requirementsBtn">Get Crop Requirements</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="result-section" id="resultSection" style="display: none;">
+                <h2>Results</h2>
+                <div id="recommendationResult" class="result-card">
+                    <h3>Recommended Crop</h3>
+                    <div class="crop-info">
+                        <p class="crop-name">Crop: <span id="recommendedCrop"></span></p>
+                        <p class="crop-name-hindi">हिंदी नाम: <span id="hindiName"></span></p>
+                    </div>
+                </div>
+                <div id="requirementsResult" class="result-card" style="display: none;">
+                    <h3>Crop Requirements</h3>
+                    <div id="requirementsList"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
