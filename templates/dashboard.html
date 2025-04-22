@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="card-title">Welcome, {{ username }}!</h2>
+                <p class="card-text">You are now logged in to AgroAlly. Use the navigation below to access different features.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Crop Recommendation</h5>
+                <p class="card-text">Get personalized crop recommendations based on your soil conditions.</p>
+                <a href="{{ url_for('crop_recommendation') }}" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Soil Analysis</h5>
+                <p class="card-text">Analyze your soil conditions and get detailed reports.</p>
+                <a href="#" class="btn btn-primary">Analyze Soil</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Crop Management</h5>
+                <p class="card-text">Manage your crops and track their growth progress.</p>
+                <a href="#" class="btn btn-primary">Manage Crops</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Quick Actions</h5>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="{{ url_for('logout') }}" class="btn btn-outline-danger">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
