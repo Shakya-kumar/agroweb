@@ -1,59 +1,209 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard{% endblock %}
+{% block title %}Dashboard - AgroAlly{% endblock %}
+
+{% block header %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-title">Welcome to AgroAlly</h1>
+        <p class="page-subtitle">Your smart farming companion for better agricultural decisions</p>
+    </div>
+</div>
+{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-12">
-        <div class="card mb-4">
-            <div class="card-body">
-                <h2 class="card-title">Welcome, {{ username }}!</h2>
-                <p class="card-text">You are now logged in to AgroAlly. Use the navigation below to access different features.</p>
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title">
+                    <i class="fas fa-seedling me-2"></i>Crop Recommendation
+                </h5>
+            </div>
+            <div class="card-body d-flex flex-column text-center">
+                <i class="fas fa-seedling feature-icon"></i>
+                <p class="card-text flex-grow-1">Get personalized crop recommendations based on your soil parameters and environmental conditions.</p>
+                <a href="{{ url_for('crop_recommendation') }}" class="btn btn-primary mt-auto">
+                    <i class="fas fa-arrow-right me-2"></i>Get Recommendations
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title">
+                    <i class="fas fa-flask me-2"></i>Soil Analysis
+                </h5>
+            </div>
+            <div class="card-body d-flex flex-column text-center">
+                <i class="fas fa-flask feature-icon"></i>
+                <p class="card-text flex-grow-1">Analyze your soil parameters and get detailed insights for optimal crop growth.</p>
+                <a href="{{ url_for('soil_analysis') }}" class="btn btn-primary mt-auto">
+                    <i class="fas fa-arrow-right me-2"></i>Analyze Soil
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title">
+                    <i class="fas fa-bug me-2"></i>Disease Detection
+                </h5>
+            </div>
+            <div class="card-body d-flex flex-column text-center">
+                <i class="fas fa-bug feature-icon"></i>
+                <p class="card-text flex-grow-1">Upload plant images to detect diseases and get treatment recommendations.</p>
+                <a href="{{ url_for('disease_analysis') }}" class="btn btn-primary mt-auto">
+                    <i class="fas fa-arrow-right me-2"></i>Detect Diseases
+                </a>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-4 mb-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">Crop Recommendation</h5>
-                <p class="card-text">Get personalized crop recommendations based on your soil conditions.</p>
-                <a href="{{ url_for('crop_recommendation') }}" class="btn btn-primary">Get Started</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4 mb-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">Soil Analysis</h5>
-                <p class="card-text">Analyze your soil conditions and get detailed reports.</p>
-                <a href="#" class="btn btn-primary">Analyze Soil</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4 mb-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">Crop Management</h5>
-                <p class="card-text">Manage your crops and track their growth progress.</p>
-                <a href="#" class="btn btn-primary">Manage Crops</a>
-            </div>
-        </div>
-    </div>
+<!-- Chatbot Toggle Button -->
+<div class="chatbot-toggle" onclick="toggleChatbot()">
+    <i class="fas fa-comments"></i>
 </div>
 
-<div class="row mt-4">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Quick Actions</h5>
-                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <a href="{{ url_for('logout') }}" class="btn btn-outline-danger">Logout</a>
-                </div>
-            </div>
+<!-- Chatbot Container -->
+<div class="chatbot-container" id="chatbot">
+    <div class="chatbot-header">
+        <span>AgroAlly Assistant</span>
+        <button class="btn btn-sm btn-light" onclick="toggleChatbot()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="chatbot-body" id="chat-messages">
+        <div class="message bot-message">
+            Hello! I'm your AgroAlly assistant. How can I help you today?
         </div>
     </div>
+    <div class="chatbot-input">
+        <input type="text" class="form-control" id="user-input" placeholder="Type your message...">
+        <button class="btn btn-primary" onclick="sendMessage()">
+            <i class="fas fa-paper-plane"></i>
+        </button>
+    </div>
 </div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .chatbot-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 350px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        display: none;
+        flex-direction: column;
+        z-index: 1000;
+    }
+    
+    .chatbot-header {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 1rem;
+        border-radius: 15px 15px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .chatbot-body {
+        height: 300px;
+        overflow-y: auto;
+        padding: 1rem;
+        background-color: var(--light-green);
+    }
+    
+    .chatbot-input {
+        padding: 1rem;
+        border-top: 1px solid #ddd;
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    .chatbot-toggle {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: var(--primary-color);
+        color: white;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        z-index: 1001;
+    }
+    
+    .message {
+        margin-bottom: 1rem;
+        max-width: 80%;
+    }
+    
+    .user-message {
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: 15px 15px 0 15px;
+        padding: 0.75rem 1rem;
+        margin-left: auto;
+    }
+    
+    .bot-message {
+        background-color: white;
+        color: var(--text-color);
+        border-radius: 15px 15px 15px 0;
+        padding: 0.75rem 1rem;
+        margin-right: auto;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function toggleChatbot() {
+        const chatbot = document.getElementById('chatbot');
+        chatbot.style.display = chatbot.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('user-input');
+        const message = input.value.trim();
+        if (message) {
+            addMessage(message, 'user');
+            input.value = '';
+            
+            // Simulate bot response (replace with actual chatbot logic)
+            setTimeout(() => {
+                addMessage("I'm a simple chatbot. In a real implementation, I would process your message and provide relevant responses about agriculture, crops, and farming.", 'bot');
+            }, 1000);
+        }
+    }
+
+    function addMessage(text, sender) {
+        const messages = document.getElementById('chat-messages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}-message`;
+        messageDiv.textContent = text;
+        messages.appendChild(messageDiv);
+        messages.scrollTop = messages.scrollHeight;
+    }
+
+    // Handle Enter key in input
+    document.getElementById('user-input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+</script>
 {% endblock %} 

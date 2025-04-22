@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, redirect, url_for, render_template, flash
 from flask_cors import CORS
 import pandas as pd
 import numpy as np
@@ -257,6 +257,100 @@ def crop_requirements():
     except Exception as e:
         logger.error(f"Error in crop_requirements: {str(e)}")
         return jsonify({"error": str(e)}), 500
+
+@app.route('/grow_crop', methods=['GET', 'POST'])
+def grow_crop():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    
+    if request.method == 'POST':
+        try:
+            # Get form data
+            crop_name = request.form['crop_name'].strip().lower()
+            logger.debug(f"Processing request for crop: {crop_name}")
+            
+            soil_params = {
+                'N': float(request.form['N']),
+                'P': float(request.form['P']),
+                'K': float(request.form['K']),
+                'temperature': float(request.form['temperature']),
+                'humidity': float(request.form['humidity']),
+                'ph': float(request.form['ph']),
+                'rainfall': float(request.form['rainfall'])
+            }
+            logger.debug(f"Soil parameters: {soil_params}")
+            
+            # Get crop data from dataset
+            df = pd.read_csv('Crop_dataset.csv')
+            logger.debug(f"Dataset loaded with {len(df)} rows")
+            
+            # First try direct match
+            crop_data = df[df['label'].str.lower() == crop_name]
+            
+            # If no direct match, try mapping
+            if crop_data.empty:
+                crop_name_english = crop_name_mapping.get(crop_name, None)
+                crop_name_hindi = hindi_to_english.get(crop_name, None)
+                logger.debug(f"Crop name mapping - English: {crop_name_english}, Hindi: {crop_name_hindi}")
+                
+                if crop_name_english or crop_name_hindi:
+                    selected_crop = crop_name_english if crop_name_english else crop_name_hindi
+                    crop_data = df[df['label'].str.lower() == selected_crop.lower()]
+            
+            if crop_data.empty:
+                logger.warning(f"No data found for crop: {crop_name}")
+                flash(f'Crop "{crop_name}" not found in our database.', 'error')
+                return redirect(url_for('grow_crop'))
+            
+            # Calculate optimal parameters (using mean values from dataset)
+            optimal_params = {
+                'N': crop_data['N'].mean(),
+                'P': crop_data['P'].mean(),
+                'K': crop_data['K'].mean(),
+                'temperature': crop_data['temperature'].mean(),
+                'humidity': crop_data['humidity'].mean(),
+                'ph': crop_data['ph'].mean(),
+                'rainfall': crop_data['rainfall'].mean()
+            }
+            logger.debug(f"Optimal parameters: {optimal_params}")
+            
+            # Generate recommendations based on differences
+            recommendations = []
+            for param in soil_params:
+                current = soil_params[param]
+                optimal = optimal_params[param]
+                diff = optimal - current
+                
+                if abs(diff) > 0.1:  # Only suggest changes if difference is significant
+                    if diff > 0:
+                        recommendations.append(f"Increase {param} by {abs(diff):.1f} {unit_info[param]}")
+                    else:
+                        recommendations.append(f"Decrease {param} by {abs(diff):.1f} {unit_info[param]}")
+            
+            if not recommendations:
+                recommendations.append("Your soil parameters are already optimal for growing this crop!")
+            
+            # Add general growing tips
+            recommendations.append(f"Maintain soil pH between {optimal_params['ph']:.1f} and {optimal_params['ph'] + 0.5:.1f}")
+            recommendations.append(f"Keep temperature around {optimal_params['temperature']:.1f}°C")
+            recommendations.append(f"Maintain humidity levels between {optimal_params['humidity']:.1f}%")
+            
+            logger.info(f"Generated {len(recommendations)} recommendations for {crop_name}")
+            
+            return render_template('crop_recommendations.html',
+                                crop_name=crop_name,
+                                soil_params=soil_params,
+                                optimal_params=optimal_params,
+                                unit_info=unit_info,
+                                recommendations=recommendations)
+            
+        except Exception as e:
+            logger.error(f"Error in grow_crop route: {str(e)}")
+            flash(f'Error processing your request: {str(e)}', 'error')
+            return redirect(url_for('grow_crop'))
+    
+    # For GET request, just render the form
+    return render_template('grow_crop.html', unit_info=unit_info)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))

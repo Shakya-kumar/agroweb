@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Soil Analysis Results{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Soil Analysis Results for {{ crop_name|title }}</h2>
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h4>Current Soil Parameters</h4>
+                        <ul class="list-group">
+                            {% for param, data in analysis_results.items() %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ param|title }}
+                                <span class="badge {% if data.status == 'Optimal' or data.status == 'Sufficient' %}bg-success{% else %}bg-warning{% endif %} rounded-pill">
+                                    {{ data.current }} {{ data.unit }}
+                                </span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Optimal Parameters for {{ crop_name|title }}</h4>
+                        <ul class="list-group">
+                            {% for param, data in analysis_results.items() %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ param|title }}
+                                <span class="badge bg-primary rounded-pill">
+                                    {{ data.optimal }} {{ data.unit }}
+                                </span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                {% if fertilizer_recommendations %}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="mb-0">Fertilizer Recommendations</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Fertilizer</th>
+                                        <th>Amount</th>
+                                        <th>Application Timing</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for fert in fertilizer_recommendations %}
+                                    <tr>
+                                        <td>{{ fert.name }}</td>
+                                        <td>{{ fert.amount }}</td>
+                                        <td>{{ fert.timing }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if general_recommendations %}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="mb-0">General Recommendations</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            {% for rec in general_recommendations %}
+                            <li class="list-group-item">{{ rec }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('soil_analysis') }}" class="btn btn-primary">Analyze Another Soil</a>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
