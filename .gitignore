@@ -48,4 +48,10 @@ static/uploads/
 
 # OS
 .DS_Store
-Thumbs.db 
+Thumbs.db
+
+# Binary executables
+*.exe
+*.dll
+*.so
+*.dylib 
