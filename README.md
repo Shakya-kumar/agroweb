@@ -1,92 +1,74 @@
-# AgroAlly - Smart Farming Solutions
+# AgroAlly - Smart Agriculture Assistant
 
-AgroAlly is an AI-powered smart farming platform that helps farmers make better agricultural decisions through advanced data analysis and machine learning.
+AgroAlly is a comprehensive web-based agricultural assistant that helps farmers and agricultural enthusiasts make informed decisions about crop management, soil analysis, and plant disease detection.
 
 ## Features
 
-- **Crop Recommendation**: Get personalized crop recommendations based on soil parameters and environmental conditions
-- **Soil Analysis**: Analyze soil health and receive detailed improvement suggestions
-- **Disease Detection**: AI-powered plant disease detection and treatment recommendations
-- **History Tracking**: Monitor and track all your farming analyses and recommendations
+### 1. Crop Recommendation System
+- Analyzes soil parameters (N, P, K, temperature, humidity, pH, rainfall)
+- Recommends suitable crops based on soil conditions
+- Provides crop information in both English and Hindi
 
-## Technologies Used
+### 2. Soil Analysis
+- Detailed analysis of soil parameters
+- Provides fertilizer recommendations
+- Offers specific treatment plans for soil improvement
+- Includes general agricultural recommendations
 
-- Python 3.8+
-- Flask
-- SQLite
-- PyTorch
-- Bootstrap 5
-- Font Awesome
-- Machine Learning & AI
+### 3. Plant Disease Detection
+- Upload plant images for disease analysis
+- Uses machine learning to detect plant diseases
+- Provides treatment recommendations
+- Supports multiple crop types
 
-## Installation
+### 4. User Management
+- Secure user registration and login
+- Personalized dashboard
+- History tracking of all analyses and recommendations
+
+## Technical Stack
+
+- **Backend**: Python Flask
+- **Database**: SQLite
+- **Machine Learning**: PyTorch
+- **Frontend**: HTML, CSS, Bootstrap
+- **Image Processing**: OpenCV
+
+## Getting Started
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/agroally.git
-cd agroally
+git clone https://github.com/Shakya-kumar/agroweb.git
 ```
 
-2. Create and activate a virtual environment:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-3. Install dependencies:
+2. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-4. Initialize the database:
+3. Run the application:
 ```bash
 python login.py
 ```
 
-5. Run the application:
-```bash
-flask run
-```
-
-The application will be available at `http://localhost:5000`
+4. Access the web application at `http://localhost:5000`
 
 ## Project Structure
 
-- `login.py`: Main application file with Flask routes and database setup
-- `templates/`: HTML templates using Jinja2
-- `static/`: Static files (CSS, JavaScript, images)
-- `models/`: Machine learning models
-- `dataset/`: Training datasets
-- `requirements.txt`: Python dependencies
-
-## Environment Variables
-
-Create a `.env` file in the root directory with the following variables:
-```
-FLASK_APP=login.py
-FLASK_ENV=development
-SECRET_KEY=your_secret_key_here
-```
+- `login.py` - Main application file
+- `templates/` - HTML templates
+- `static/` - CSS, JavaScript, and uploads
+- `models/` - Machine learning models
+- `users.db` - SQLite database
 
 ## Contributing
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Contact
 
-- Email: agroally@gmail.com
-- Website: [agroally.com](https://agroally.com)
-
-## Acknowledgments
-
-- Thanks to all contributors who have helped shape AgroAlly
-- Special thanks to the agricultural research community for providing valuable datasets
-- Icons provided by Font Awesome 
+For any queries or suggestions, please open an issue in the repository. 
