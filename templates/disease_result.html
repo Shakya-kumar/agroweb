@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Disease Analysis Result{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Disease Analysis Result</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5>Uploaded Image:</h5>
+                            <img src="{{ image_path }}" class="img-fluid rounded" alt="Uploaded plant image">
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Analysis Results:</h5>
+                            <div class="alert {% if disease_detected %}alert-danger{% else %}alert-success{% endif %}">
+                                <h6>Disease Status: {% if disease_detected %}Detected{% else %}No Disease Detected{% endif %}</h6>
+                            </div>
+                            {% if disease_detected %}
+                            <div class="mt-3">
+                                <h6>Disease Name:</h6>
+                                <p>{{ disease_name }}</p>
+                                <h6>Confidence Level:</h6>
+                                <p>{{ confidence }}%</p>
+                                <h6>Recommended Treatment:</h6>
+                                <p>{{ treatment }}</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('disease_analysis') }}" class="btn btn-primary">Analyze Another Image</a>
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

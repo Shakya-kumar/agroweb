@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}History{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Your History</h2>
+                    
+                    {% if history_entries %}
+                        {% for entry in history_entries %}
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5 class="mb-0">
+                                        {{ entry.feature|title|replace('_', ' ') }} - {{ entry.timestamp }}
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6>Input Data:</h6>
+                                            <ul class="list-group list-group-flush">
+                                                {% if entry.feature == 'crop_recommendation' %}
+                                                    {% for key, value in entry.input_data.items() %}
+                                                        <li class="list-group-item">
+                                                            {{ key|title }}: {{ value }} {{ unit_info[key] }}
+                                                        </li>
+                                                    {% endfor %}
+                                                {% elif entry.feature == 'soil_analysis' %}
+                                                    <li class="list-group-item">
+                                                        Crop: {{ entry.input_data.crop_name|title }}
+                                                    </li>
+                                                    {% for key, value in entry.input_data.soil_parameters.items() %}
+                                                        <li class="list-group-item">
+                                                            {{ key|title }}: {{ value }} {{ unit_info[key] }}
+                                                        </li>
+                                                    {% endfor %}
+                                                {% elif entry.feature == 'disease_analysis' %}
+                                                    <li class="list-group-item">
+                                                        Plant Type: {{ entry.input_data.plant_type|title }}
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        Image: {{ entry.input_data.image_filename }}
+                                                    </li>
+                                                {% endif %}
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6>Results:</h6>
+                                            <ul class="list-group list-group-flush">
+                                                {% if entry.feature == 'crop_recommendation' %}
+                                                    <li class="list-group-item">
+                                                        Recommended Crop: {{ entry.result_data.recommended_crop|title }}
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        Hindi Name: {{ entry.result_data.hindi_name }}
+                                                    </li>
+                                                {% elif entry.feature == 'soil_analysis' %}
+                                                    {% for key, value in entry.result_data.analysis_results.items() %}
+                                                        <li class="list-group-item">
+                                                            {{ key|title }}: {{ value.status }}
+                                                            (Current: {{ value.current }} {{ value.unit }},
+                                                            Optimal: {{ value.optimal }} {{ value.unit }})
+                                                        </li>
+                                                    {% endfor %}
+                                                    {% if entry.result_data.fertilizer_recommendations %}
+                                                        <li class="list-group-item">
+                                                            <strong>Fertilizer Recommendations:</strong>
+                                                            <ul>
+                                                                {% for rec in entry.result_data.fertilizer_recommendations %}
+                                                                    <li>{{ rec.name }}: {{ rec.amount }} ({{ rec.timing }})</li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </li>
+                                                    {% endif %}
+                                                {% elif entry.feature == 'disease_analysis' %}
+                                                    <li class="list-group-item">
+                                                        Disease Detected: {{ entry.result_data.disease_detected }}
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        Disease Name: {{ entry.result_data.disease_name }}
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        Confidence: {{ entry.result_data.confidence|round(2) }}%
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        Treatment: {{ entry.result_data.treatment }}
+                                                    </li>
+                                                {% endif %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="alert alert-info">
+                            No history entries found.
+                        </div>
+                    {% endif %}
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Back to Dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

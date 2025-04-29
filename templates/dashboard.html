@@ -1,0 +1,278 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - AgroAlly{% endblock %}
+
+{% block header %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-title">Welcome, {{ session.get('username') }}!</h1>
+        <p class="page-subtitle">Your AI-powered smart farming companion for better agricultural decisions</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Features Section -->
+<div class="row mb-5">
+    <div class="col-12 text-center mb-4">
+        <h2 class="display-5 fw-bold">Smart Farming Features</h2>
+        <p class="lead text-muted">Explore our advanced agricultural tools powered by AI</p>
+    </div>
+    
+    <!-- Crop Recommendation Card -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-seedling me-2"></i>Crop Recommendation
+                </h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Get personalized crop recommendations based on your soil parameters and environmental conditions. Our AI analyzes multiple factors to suggest the best crops for your land.</p>
+                <div class="d-grid">
+                    <a href="{{ url_for('crop_recommendation') }}" class="btn btn-primary">
+                        <i class="fas fa-arrow-right me-2"></i>Get Recommendation
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Soil Analysis Card -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-flask me-2"></i>Soil Analysis
+                </h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Analyze your soil parameters and get detailed recommendations for optimal crop growth. Our system provides comprehensive soil health insights and improvement suggestions.</p>
+                <div class="d-grid">
+                    <a href="{{ url_for('soil_analysis') }}" class="btn btn-primary">
+                        <i class="fas fa-arrow-right me-2"></i>Analyze Soil
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Disease Analysis Card -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-bug me-2"></i>Disease Analysis
+                </h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Upload plant images to detect diseases and get treatment recommendations. Our AI-powered system can identify various plant diseases and suggest appropriate remedies.</p>
+                <div class="d-grid">
+                    <a href="{{ url_for('disease_analysis') }}" class="btn btn-primary">
+                        <i class="fas fa-arrow-right me-2"></i>Detect Disease
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent History Section -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-history me-2"></i>Recent Analysis History
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if history_entries %}
+                    <div class="list-group">
+                        {% for entry in history_entries[:5] %}
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">
+                                            <i class="fas fa-{{ 'seedling' if entry.feature == 'crop_recommendation' else 'flask' if entry.feature == 'soil_analysis' else 'bug' }} me-2"></i>
+                                            {{ entry.feature.replace('_', ' ').title() }}
+                                        </h6>
+                                        <small class="text-muted">{{ entry.timestamp }}</small>
+                                    </div>
+                                    <a href="{{ url_for('view_history') }}" class="btn btn-sm btn-outline-primary">
+                                        View Details
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-history fa-3x text-muted mb-3"></i>
+                        <p class="text-muted mb-0">No history available yet. Start using our features to see your analysis history here.</p>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="card-footer text-end">
+                <a href="{{ url_for('view_history') }}" class="btn btn-primary">
+                    <i class="fas fa-history me-2"></i>View Full History
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Overview Section -->
+<div class="row mb-5">
+    <div class="col-12 text-center mb-4">
+        <h2 class="display-5 fw-bold">Why Choose AgroAlly?</h2>
+        <p class="lead text-muted">Experience the future of smart farming</p>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="text-center">
+            <i class="fas fa-brain feature-icon"></i>
+            <h5>AI-Powered</h5>
+            <p class="text-muted">Advanced machine learning algorithms for accurate predictions</p>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="text-center">
+            <i class="fas fa-chart-line feature-icon"></i>
+            <h5>Data-Driven</h5>
+            <p class="text-muted">Make informed decisions based on comprehensive data analysis</p>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="text-center">
+            <i class="fas fa-clock feature-icon"></i>
+            <h5>Time-Saving</h5>
+            <p class="text-muted">Get instant recommendations and save valuable farming time</p>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="text-center">
+            <i class="fas fa-leaf feature-icon"></i>
+            <h5>Sustainable</h5>
+            <p class="text-muted">Promote sustainable farming practices with smart solutions</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .chatbot-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 350px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        display: none;
+        flex-direction: column;
+        z-index: 1000;
+    }
+    
+    .chatbot-header {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 1rem;
+        border-radius: 15px 15px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .chatbot-body {
+        height: 300px;
+        overflow-y: auto;
+        padding: 1rem;
+        background-color: var(--light-green);
+    }
+    
+    .chatbot-input {
+        padding: 1rem;
+        border-top: 1px solid #ddd;
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    .chatbot-toggle {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: var(--primary-color);
+        color: white;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        z-index: 1001;
+    }
+    
+    .message {
+        margin-bottom: 1rem;
+        max-width: 80%;
+    }
+    
+    .user-message {
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: 15px 15px 0 15px;
+        padding: 0.75rem 1rem;
+        margin-left: auto;
+    }
+    
+    .bot-message {
+        background-color: white;
+        color: var(--text-color);
+        border-radius: 15px 15px 15px 0;
+        padding: 0.75rem 1rem;
+        margin-right: auto;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function toggleChatbot() {
+        const chatbot = document.getElementById('chatbot');
+        chatbot.style.display = chatbot.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('user-input');
+        const message = input.value.trim();
+        if (message) {
+            addMessage(message, 'user');
+            input.value = '';
+            
+            // Simulate bot response (replace with actual chatbot logic)
+            setTimeout(() => {
+                addMessage("I'm a simple chatbot. In a real implementation, I would process your message and provide relevant responses about agriculture, crops, and farming.", 'bot');
+            }, 1000);
+        }
+    }
+
+    function addMessage(text, sender) {
+        const messages = document.getElementById('chat-messages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}-message`;
+        messageDiv.textContent = text;
+        messages.appendChild(messageDiv);
+        messages.scrollTop = messages.scrollHeight;
+    }
+
+    // Handle Enter key in input
+    document.getElementById('user-input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+</script>
+{% endblock %} 

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Crop Recommendation Result{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Crop Recommendation Result</h2>
+                
+                <div class="alert alert-success text-center mb-4">
+                    <h4>Recommended Crop: {{ crop|title }} ({{ hindi_name }})</h4>
+                </div>
+                
+                <h5 class="mb-3">Your Input Values:</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Value</th>
+                                <th>Unit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in range(attributes|length) %}
+                            <tr>
+                                <td>{{ attributes[i]|title }}</td>
+                                <td>{{ "%.2f"|format(input_values[i]) }}</td>
+                                <td>{{ unit_info[attributes[i]] }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="d-grid gap-2 mt-4">
+                    <a href="{{ url_for('crop_recommendation') }}" class="btn btn-primary">Get Another Recommendation</a>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

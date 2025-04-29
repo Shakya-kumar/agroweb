@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}View Crops{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Your Crops</h2>
+                
+                {% if crops %}
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Crop Name</th>
+                                <th>Planting Date</th>
+                                <th>Area (acres)</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for crop in crops %}
+                            <tr>
+                                <td>{{ crop.name }}</td>
+                                <td>{{ crop.planting_date }}</td>
+                                <td>{{ crop.area }}</td>
+                                <td>
+                                    <span class="badge bg-success">Growing</span>
+                                </td>
+                                <td>
+                                    <a href="#" class="btn btn-sm btn-primary">View Details</a>
+                                    <a href="#" class="btn btn-sm btn-warning">Edit</a>
+                                    <a href="#" class="btn btn-sm btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    <p class="mb-0">You haven't added any crops yet. <a href="{{ url_for('add_crop') }}">Add your first crop</a> to get started.</p>
+                </div>
+                {% endif %}
+                
+                <div class="d-grid gap-2 mt-4">
+                    <a href="{{ url_for('add_crop') }}" class="btn btn-primary">Add New Crop</a>
+                    <a href="{{ url_for('crop_management') }}" class="btn btn-outline-secondary">Back to Crop Management</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
