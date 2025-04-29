@@ -31,6 +31,9 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            background: url('{{ url_for('static', filename='images/logo.png') }}') center center no-repeat;
+            background-size: 60vw 60vw;
+            background-attachment: fixed;
         }
 
         .navbar {
@@ -210,8 +213,8 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="{{ url_for('dashboard') }}">
-                <i class="fas fa-leaf me-2"></i>AgroAlly
+            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('dashboard') }}">
+                <span style="font-weight:600; color:var(--white); font-size:1.5rem;">AgroAlly</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
